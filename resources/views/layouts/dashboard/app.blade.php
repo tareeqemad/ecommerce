@@ -16,6 +16,10 @@
     <!-- template rtl version -->
     <link rel="stylesheet" href="{{ asset('dashboard/css/custom-style.css') }}">
 
+
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{ asset('dashboard/plugins/select2/select2.min.css') }}">
+
     <!-- Google Font: Tajawal -->
     <link href="https://fonts.googleapis.com/css2?family=Tajawal&display=swap" rel="stylesheet">
 
@@ -197,6 +201,9 @@
 <script src="{{ asset('dashboard/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <!-- AdminLTE App -->
 <script src="{{ asset('dashboard/js/adminlte.min.js') }}"></script>
+
+<!-- Select2 -->
+<script src="{{ asset('dashboard/plugins/select2/select2.full.min.js') }}"></script>
 
 <script>
     $(function () {

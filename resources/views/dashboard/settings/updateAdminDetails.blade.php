@@ -1,15 +1,15 @@
 @extends('layouts.dashboard.app')
 @section('title')
- تغير كلمة المرور
+    تعديل بيانات الحساب
 @endsection
 @section('content-header-title')
-    تغير كلمة المرور
+   تعديل بيانات الحساب
 @endsection
 @section('content-header')
     الصفحة الرئيسية
 @endsection
 @section('content-active')
-    تغير كلمة المرور
+    تعديل بيانات الحساب
 @endsection
 @section('content')
     <div class="row">
@@ -18,7 +18,7 @@
             <!-- general form elements -->
             <div class="card card-primary">
                 <div class="card-header">
-                    <h3 class="card-title">تعديل كلمة مرور المدير</h3>
+                    <h3 class="card-title">   تعديل بيانات الحساب</h3>
                 </div>
                 @if(Session::has('error_message'))
                     <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
@@ -35,16 +35,22 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                @endif
-                <!-- /.card-header -->
+             @endif
+                @if ($errors->any())
+                    <div class="alert alert-danger" style="margin-top: 10px;">
+                        @foreach ($errors->all() as $error)
+                            <p>{{ $error }}</p>
+                        @endforeach
+                    </div>
+                   @endif
+
+            <!-- /.card-header -->
                 <!-- form start -->
-                <form role="form" method="post" action="{{url('/admin/update-current-pwd')}}" name="updatePasswordForm" id="updatePasswordForm">
-                   @csrf
+                <form role="form" method="post" action="{{url('/admin/update-admin-details')}}"
+                      enctype="multipart/form-data"
+                      name="updateDetailsForm" id="updateDetailsForm">
+                    @csrf
                     <div class="card-body">
-                       <!-- <div class="form-group">
-                            <label for="exampleInputEmail1">اسم المدير</label>
-                            <input type="email" class="form-control" value="" id="admin_name" name="admin_name">
-                        </div>-->
 
                         <div class="form-group">
                             <label for="exampleInputEmail1">البريد الاكتروني للمدير</label>
@@ -55,19 +61,22 @@
                             <input type="text" class="form-control" value="{{Auth::guard('admin')->user()->type }}" readonly id="exampleInputType">
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputCurr">كلمة المرور الحالية</label>
-                            <input type="password" class="form-control" value=""  id="current_pwd"  name="current_pwd">
-                            <span id="chkCurretPwd"></span>
+                            <label for="exampleInputEmail1">اسم المدير</label>
+                            <input type="text" class="form-control"  id="admin_name" name="name" value="{{Auth::guard('admin')->user()->name }}" required>
                         </div>
 
                         <div class="form-group">
-                            <label for="exampleInputnewpwd">كلمة المرور الجديدة</label>
-                            <input type="password" class="form-control" value=""  name="new_pwd" id="new_pwd" >
+                            <label for="exampleInputEmail1">رقم الجوال</label>
+                            <input type="text" class="form-control" value="{{Auth::guard('admin')->user()->mobile }}" id="admin_mobile" name="mobile"  required>
                         </div>
 
                         <div class="form-group">
-                            <label for="exampleInputconfirm">تأكيد كلمة المرور</label>
-                            <input type="password" class="form-control" value=""  id="confirm_pwd" name="confirm_pwd" >
+                            <label for="exampleInputEmail1">الصورة</label>
+                            <input type="file" class="form-control" value="" id="admin_image" name="image">
+                            @if(!empty(Auth::guard('admin')->user()->image))
+                                <a target="_blank" href="{{url('image/admin_images/admin_photo/'.Auth::guard('admin')->user()->image)}}">عرض الصورة</a>
+                                <input type="hidden" name="current_admin_image" value="{{Auth::guard('admin')->user()->image}}">
+                            @endif
                         </div>
 
                     </div>

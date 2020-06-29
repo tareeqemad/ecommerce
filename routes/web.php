@@ -30,6 +30,17 @@ Route::prefix('/admin')->namespace('Admin')->group(function (){
         Route::get('settings','AdminController@settings');
         Route::get('logout','AdminController@logout');
         Route::post('check-current-pwd','AdminController@chkCurrentPassword');
+        Route::post('update-current-pwd','AdminController@updateCurrentPassword');
+        Route::match(['get','post'],'update-admin-details','AdminController@updateAdminDetails');
+
+        //sections
+        Route::get('sections','SectionController@sections');
+        Route::post('update-section-status','SectionController@updateSectionStatus');
+
+        //Categories
+        Route::get('categories','CategoryController@index');
+        Route::post('update-cat-status','CategoryController@updateCatStatus');
+        Route::match(['get','post'],'add-edit-category/{id?}','CategoryController@addEditCategory');
 
     });
 });
