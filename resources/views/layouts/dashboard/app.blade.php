@@ -27,6 +27,9 @@
         body,h1,h2,h3,h4,h5,h6,a,p,button,label{
             font-family: 'Tajawal', sans-serif;
         }
+        .bg-primary, .label-primary {
+            background-color: #5b9ade!important;
+        }
     </style>
 
     @yield('style')

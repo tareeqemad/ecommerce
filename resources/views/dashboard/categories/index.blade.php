@@ -20,6 +20,15 @@
     <!-- Main content -->
     <div class="row">
         <div class="col-12">
+            @if(Session::has('success_message'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                    {{Session::get('success_message')}}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
+
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title"> الأصناف</h3>
