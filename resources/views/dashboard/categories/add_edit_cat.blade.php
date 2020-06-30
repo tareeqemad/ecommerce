@@ -15,6 +15,31 @@
     <div class="row">
         <!-- left column -->
         <div class="col-md-12">
+            @if($errors->any())
+                <div class="alert alert-danger" style="margin-top: 10px;">
+                    <ul>
+                        @foreach($errors->all() as $error)
+                            <li>{{$error}}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            @if(Session::has('error_message'))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                    {{Session::get('error_message')}}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
+            @if(Session::has('success_message'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                    {{Session::get('success_message')}}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+             @endif
             <!-- general form elements -->
             <form name="categoryForm" id="categoryForm" action="{{url('admin/add-edit-category')}}" method="post" enctype="multipart/form-data">
             @csrf
@@ -22,22 +47,6 @@
                 <div class="card-header">
                     <h3 class="card-title">{{$title}}</h3>
                 </div>
-                @if(Session::has('error_message'))
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
-                        {{Session::get('error_message')}}
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                @endif
-                @if(Session::has('success_message'))
-                    <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
-                        {{Session::get('success_message')}}
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-            @endif
             <!-- /.card-header -->
                 <div class="card-body">
                     <div class="row">
@@ -46,11 +55,8 @@
                                 <label for="category_name">اسم الصنف</label>
                                 <input type="text" class="form-control" name="category_name" id="category_name" placeholder="اسم الصنف">
                             </div>
-                            <div class="form-group">
-                                <label>اختيار مستوى الصنف</label>
-                                <select class="form-control select2"  name="parent_id" style="width: 100%;text-align: right">
-                                    <option value="0">مستوى أساسي</option>
-                                </select>
+                            <div id="appendCategoriesLevel">
+                                @include('dashboard.categories.append_categories_level')
                             </div>
                             <!-- /.form-group -->
                         </div>
@@ -130,10 +136,6 @@
 @endsection
 @section('script')
     <!-- Required datatable js -->
-    <script src="{{ asset('dashboard/js/custom/admin_script.js') }}"></script>
-
-    <script>
-        $('.select2').select2();
-    </script>
+    <script src="{{ asset('dashboard/js/custom/add_edit_cat.js') }}"></script>
 @endsection
 

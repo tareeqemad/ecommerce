@@ -90,6 +90,19 @@ class CategoryController extends Controller
     }
 
 
+    public function appendCategoryLevel(Request $request)
+    {
+        if ($request->ajax()){
+            $data = $request->all();
+            print_r($data);
+            $getCategories = Category::with('subcategories')->where(['section_id',$data['section_id'],
+                'parent_id'=>0,'status'=>1])->get();
+            $getCategories =json_decode(json_encode($getCategories),true);
+            return view('dashboard.categories.append_categories_level')->with(compact('getCategories'));
+        }
+    }
+
+
     public function updateCatStatus(Request $request)
     {
         if ($request->ajax()){
