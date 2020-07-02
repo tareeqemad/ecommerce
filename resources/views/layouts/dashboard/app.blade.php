@@ -30,6 +30,14 @@
         .bg-primary, .label-primary {
             background-color: #5b9ade!important;
         }
+        .card-primary:not(.card-outline) .card-header {
+            background-color: #5b9ade;
+            border-bottom: 0;
+        }
+        .sidebar-dark-danger .nav-sidebar>.nav-item>.nav-link.active {
+            color: #fff;
+            background-color: #3587dc;
+        }
     </style>
 
     @yield('style')

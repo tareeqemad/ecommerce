@@ -13,7 +13,11 @@ class CategoryController extends Controller
     public function index ()
     {
         Session::put('page','categories');
-        $categories = Category::get();
+       /* $categories = Category::with(['section' =>function($query){
+        $query->select('id','name');
+    }])->get();*/
+        $categories = Category::with(['section','parentcategory'])->get();
+        $categories = json_decode(json_encode($categories));
         return view('dashboard.categories.index',compact('categories'));
     }
 
@@ -21,8 +25,21 @@ class CategoryController extends Controller
         if ($id==""){
             $title = "اضافة صنف جديد";
             $category = new Category ;
+            $categorydata =     [];
+            $getCategories = [];
+            $message = "تم اضافة الصنف بنجاح";
+            $btn_txt = "اضافة صنف";
+            $icon = "plus";
         }else {
-            $title = "تعديل بيانات صنف صنف ";
+            $title = "تعديل بيانات صنف";
+            $categorydata = Category::where('id',$id)->first();
+            $getCategories = Category::with('subcategories')->where(['parent_id'=>0,'section_id'=>$categorydata['section_id']])->get();
+            $category = Category::find($id);
+            $message = "تم تعديل الصنف بنجاح";
+            $btn_txt = "تعديل صنف";
+            $icon = "edit";
+            //$categorydata = json_decode(json_encode($categorydata));
+            // echo "<pre>"; print_r($categorydata); die();
         }
         if ($request->isMethod('post')){
             $data = $request->all();
@@ -55,6 +72,9 @@ class CategoryController extends Controller
                     $category->category_image = $imageName;
                 }
             }
+            if (empty($data['category_image'])){
+                $data['category_image'] = "";
+            }
             if (empty($data['description'])){
                 $data['description'] = "";
             }
@@ -81,11 +101,11 @@ class CategoryController extends Controller
             $category->meta_keywords = $data['meta_keywords'];
             $category->status = 1;
             $category->save();
-            session::flash('success_message','تم اضافة الصنف بنجاح');
+            session::flash('success_message',$message);
             return  redirect('admin/categories');
         }
         $getSections = Section::get();
-        return view('dashboard.categories.add_edit_cat',compact('title','getSections'));
+        return view('dashboard.categories.add_edit_cat',compact('title','getSections','categorydata','getCategories','btn_txt','icon'));
 
     }
 
@@ -94,12 +114,38 @@ class CategoryController extends Controller
     {
         if ($request->ajax()){
             $data = $request->all();
-            print_r($data);
-            $getCategories = Category::with('subcategories')->where(['section_id',$data['section_id'],
-                'parent_id'=>0,'status'=>1])->get();
+            $getCategories = Category::with('subcategories')->where(['section_id'=>$data['section_id'],
+                'parent_id' =>0 , 'status'=>1])->get();
             $getCategories =json_decode(json_encode($getCategories),true);
+            //echo "<pre>"; print_r($getCategories); die();
             return view('dashboard.categories.append_categories_level')->with(compact('getCategories'));
         }
+    }
+
+    public function deleteCatImage($id)
+    {
+        $catImage = Category::select('category_image')->where('id',$id)->first();
+
+        $cat_img_path = 'image/category_images/cat_photo';
+
+        if (file_exists($cat_img_path.$catImage->category_image)){
+            unlink($cat_img_path.$catImage->category_image);
+        }
+
+        Category::where('id',$id)->update(['category_image'=>'']);
+        $message = 'تم حذف الصورة بنجاح';
+        session::flash('success_message',$message);
+        return  redirect()->back();
+       // return  redirect()->back()->with('flash_message_success','تم حذف الصورة بنجاح');
+
+    }
+    public function deleteCat($id)
+    {
+        Category::where('id',$id)->delete();
+        $message = 'تم حذف الصنف بنجاح';
+        session::flash('success_message',$message);
+        return  redirect()->back();
+
     }
 
 

@@ -41,11 +41,6 @@
                 <form role="form" method="post" action="{{url('/admin/update-current-pwd')}}" name="updatePasswordForm" id="updatePasswordForm">
                    @csrf
                     <div class="card-body">
-                       <!-- <div class="form-group">
-                            <label for="exampleInputEmail1">اسم المدير</label>
-                            <input type="email" class="form-control" value="" id="admin_name" name="admin_name">
-                        </div>-->
-
                         <div class="form-group">
                             <label for="exampleInputEmail1">البريد الاكتروني للمدير</label>
                             <input type="email" class="form-control" value="{{Auth::guard('admin')->user()->email }}" readonly>

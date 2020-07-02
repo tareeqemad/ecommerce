@@ -2,8 +2,10 @@ $(document).ready(function () {
 
     $('.select2').select2();
 
-
-
+    $('textarea').each(function(){
+            $(this).val($(this).val().trim());
+        }
+    );
     $('#section_id').change(function () {
         var section_id = $(this).val();
         $.ajax(
@@ -19,7 +21,7 @@ $(document).ready(function () {
                 }
             }
         )
-    })
+    });
 
 
 });
