@@ -78,8 +78,10 @@
                                 </td>
                                  <td>
                                      <a href="{{url('admin/add-edit-category/'.$category->id)}}" title="تعديل"><i class="fa fa-edit"></i> </a>
-                                     <a href="{{url('admin/delete-cat/'.$category->id)}}" title="حذف"><i class="fa fa-trash"></i> </a>
-
+                                     <a href="javasctipt:void(0)"
+                                        record="{{$category->category_name}}"
+                                        recordid = {{$category->id}}
+                                        title="حذف" class="deleteCat"><i class="fa fa-trash"></i> </a>
                                  </td>
                             </tr>
                         @endforeach
@@ -95,8 +97,9 @@
     <!-- DataTables -->
     <script src="{{ asset('dashboard/plugins/datatables/jquery.dataTables.js') }}"></script>
     <script src="{{ asset('dashboard/plugins/datatables/dataTables.bootstrap4.js') }}"></script>
-    <!-- Required datatable js -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 
+    <!-- Required datatable js -->
     <script>
         $('#example2').DataTable({
             "language": {
@@ -113,7 +116,7 @@
             "autoWidth": false
         });
 
-        $('.updateCatStatus').click(function () {
+        $('.updateCatStatus').click(function(){
             var status = $(this).text();
             var cat_id = $(this).attr('cat_id');
             $.ajax({
@@ -131,6 +134,26 @@
                     alert("error")
                 }
             })
+        })
+
+        $('.deleteCat').click(function () {
+                //alert(1);
+           // var record = $(this).attr('record');
+            var recordid = $(this).attr('recordid');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.value) {
+                   window.location.href="/admin/delete-cat"+"/"+recordid;
+                }
+            })
+
         })
     </script>
 @endsection
